@@ -1,0 +1,48 @@
+{         
+    "settings": {
+        "analysis": {
+          "analyzer": {
+            "hot_suggest_anaylzer":{
+              "char_filter":["html_strip"],
+              "tokenizer":"keyword",
+              "filter":"hot_suggest_filter"
+            }
+          },
+          "filter": {
+            "hot_suggest_filter":{
+              "type":"pinyin",
+              "keep_full_pinyin":false,
+              "keep_joined_full_pinyin": true,
+              "keep_original": true
+            }
+          }
+        }
+      },
+    "mappings" : {
+        "properties" : {
+          "id" : {
+            "type" : "long"
+          },
+          "brand" : {
+            "type" : "text",
+            "analyzer": "ik_max_word",
+            "search_analyzer": "ik_smart", 
+            "fields" : {
+              "suggest" :{
+                "type": "completion",
+                "analyzer":"hot_suggest_anaylzer",
+                "search_analyzer": "keyword"
+              },
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          }
+        }
+      },
+    "index_patterns": ["logstash-hotword*"],
+    "template" : "logstash-hotword",
+    "order" : 10
+
+}
